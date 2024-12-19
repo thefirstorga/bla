@@ -11,7 +11,8 @@ import ReportsPage from "./pages/ReportsPage";
 import UsersPage from "./pages/UsersPage";
 import ProtectedRouteLogin from "./components/ProtectedRouteLogin";
 
-axios.defaults.baseURL = "http://localhost:4000";
+// axios.defaults.baseURL = "http://localhost:4000";
+axios.defaults.baseURL = "http://fall2024c56g11.int3306.freeddns.org/";
 axios.defaults.withCredentials = true;
 
 function AdminApp() {
