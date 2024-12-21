@@ -37,7 +37,6 @@ const FavouritePage = () => {
               </div>
               <div className='py-3 pr-3 grow overflow-hidden w-80'>
                 <h2 className='font-semibold text-xl text-gray-800 mt-1 truncate hover:truncate-none transition-all duration-300'>{place.title}</h2>
-                <p className='text-md text-gray-500 mt-2 truncate hover:truncate-none transition-all duration-300'>{place.description}</p>
                 <p className='text-md text-gray-500 mt-2 truncate hover:truncate-none transition-all duration-300'>{place.address}</p>
               </div>
             </Link>

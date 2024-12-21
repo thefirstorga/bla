@@ -135,12 +135,12 @@ function ProfileVisitPage() {
                                 </div>
                                 <div className='py-3 pr-3 grow overflow-hidden w-80'>
                                     <h2 className='font-bold text-2xl text-gray-800 mt-1 truncate hover:truncate-none transition-all duration-300 mb-4'>{place.title}</h2>
-                                    <h2 className='text-sm text-gray-500 mt-1 line-clamp-2'>{place.address}</h2>
+                                    <h2 className='text-sm text-gray-500 mt-1 line-clamp-1'>{place.address}</h2>
                                 </div>
                             </Link>
                         ))
                     ) : (
-                        <p className="text-gray-500">Không có nhà nào đang hiển thị.</p>
+                        <p className="text-gray-500">Không có nhà nào đang hoạt động.</p>
                     )}
                 </div>
             </div>
@@ -156,18 +156,17 @@ function ProfileVisitPage() {
                                 className='flex gap-4 mt-4 bg-gray-200 rounded-2xl overflow-hidden shadow-md shadow-gray-500'
                                 key={place.id}
                             >
-                                <div className='w-48 h-48 relative'>
+                                <div className='w-56'>
                                     <PlaceImg place={place} />
                                 </div>
-                                <div className='py-3 pr-3 grow'>
-                                    <p className='text-xl border-b-4'>{place.title}</p>
-                                    <p className='text-md'>{place.address}</p>
-                                    <p className='border border-t-2 text-sm mt-2'>{place.description}</p>
+                                <div className='py-3 pr-3 grow overflow-hidden w-80'>
+                                    <h2 className='font-bold text-2xl text-gray-800 mt-1 truncate hover:truncate-none transition-all duration-300 mb-4'>{place.title}</h2>
+                                    <h2 className='text-sm text-gray-500 mt-1 line-clamp-1'>{place.address}</h2>
                                 </div>
                             </Link>
                         ))
                     ) : (
-                        <p className="text-gray-500">Không có nhà nào bị xóa.</p>
+                        <p className="text-gray-500">Không có nhà nào bị vi phạm.</p>
                     )}
                 </div>
             </div>

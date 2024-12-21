@@ -5,7 +5,7 @@ import BookingWidget from '../components/BookingWidget';
 import PlaceGallery from '../components/PlaceGallery';
 import { UserContext } from '../components/UserContext';
 import PlaceDetail from './PlaceDetail';
-import { differenceInCalendarMonths, differenceInDays, format } from 'date-fns';
+import { addMonths, differenceInCalendarMonths, differenceInDays, format } from 'date-fns';
 import InvoiceDetailRenter from '../components/InvoiceDetailRenter';
 import MapComponent from '../components/MapComponent';
 import { BASE_URL } from '../../config';
@@ -212,10 +212,18 @@ function PlacePage() {
             }
             if(bookingDetail.status === 'APPROVED') {
                 const today = new Date();
-                const checkOutDate = new Date(bookingDetail.checkOut);
-                const monthsRemaining = differenceInCalendarMonths(checkOutDate, today);
-                const startOfNextMonth = new Date(today.getFullYear(), today.getMonth() + monthsRemaining, 1);
-                const remainingDaysInMonth = differenceInDays(checkOutDate, startOfNextMonth);
+                const checkOutDate = new Date(bookingNow.checkOut);
+                let monthsRemaining = differenceInCalendarMonths(checkOutDate, today);
+                // const startOfNextMonth = new Date(today.getFullYear(), today.getMonth() + monthsRemaining, 1);
+                // const remainingDaysInMonth = differenceInDays(checkOutDate, startOfNextMonth);
+                let adjustedStartDate = addMonths(today, monthsRemaining);
+                let remainingDaysInMonth = differenceInDays(checkOutDate, adjustedStartDate) + 1;
+        
+                if (remainingDaysInMonth < 0) {
+                    monthsRemaining -= 1;
+                    adjustedStartDate = addMonths(today, monthsRemaining);
+                    remainingDaysInMonth = differenceInDays(checkOutDate, adjustedStartDate) + 1;
+                }
 
                 if(monthsRemaining === 0 
                     && bookingDetail.isContinue === false
@@ -250,7 +258,11 @@ function PlacePage() {
                                 </div>
                                 <div className="p-4 bg-white border border-gray-300 rounded-lg shadow-md">
                                     <p className="text-lg font-semibold text-gray-800">Thời gian còn lại:</p>
-                                    <p className="text-gray-600">{monthsRemaining} tháng và {remainingDaysInMonth} ngày</p>
+                                    <p className="text-gray-600">
+                                        {monthsRemaining > 0 && `${monthsRemaining} tháng `}
+                                        {remainingDaysInMonth > 0 && `${remainingDaysInMonth} ngày`}
+                                        {monthsRemaining === 0 && remainingDaysInMonth === 0 && 'Hết hạn hôm nay'}
+                                    </p>
                                 </div>
                                 {option}
                                 <button onClick={(ev) => notRentRequest(ev, bookingDetail.id)} className="primary">Hủy thuê nhà</button>
@@ -263,10 +275,18 @@ function PlacePage() {
             }
             if(bookingDetail.status === 'WAIT') {
                 const today = new Date();
-                const checkOutDate = new Date(bookingDetail.checkOut);
-                const monthsRemaining = differenceInCalendarMonths(checkOutDate, today);
-                const startOfNextMonth = new Date(today.getFullYear(), today.getMonth() + monthsRemaining, 1);
-                const remainingDaysInMonth = differenceInDays(checkOutDate, startOfNextMonth);
+                const checkOutDate = new Date(bookingNow.checkOut);
+                let monthsRemaining = differenceInCalendarMonths(checkOutDate, today);
+                // const startOfNextMonth = new Date(today.getFullYear(), today.getMonth() + monthsRemaining, 1);
+                // const remainingDaysInMonth = differenceInDays(checkOutDate, startOfNextMonth);
+                let adjustedStartDate = addMonths(today, monthsRemaining);
+                let remainingDaysInMonth = differenceInDays(checkOutDate, adjustedStartDate) + 1;
+        
+                if (remainingDaysInMonth < 0) {
+                    monthsRemaining -= 1;
+                    adjustedStartDate = addMonths(today, monthsRemaining);
+                    remainingDaysInMonth = differenceInDays(checkOutDate, adjustedStartDate) + 1;
+                }
 
                 rentInfo = (
                     <div>
@@ -279,7 +299,11 @@ function PlacePage() {
                                 </div>
                                 <div className="p-4 bg-white border border-gray-300 rounded-lg shadow-md">
                                     <p className="text-lg font-semibold text-gray-800">Thời gian còn lại:</p>
-                                    <p className="text-gray-600">{monthsRemaining} tháng và {remainingDaysInMonth} ngày</p>
+                                    <p className="text-gray-600">
+                                        {monthsRemaining > 0 && `${monthsRemaining} tháng `}
+                                        {remainingDaysInMonth > 0 && `${remainingDaysInMonth} ngày`}
+                                        {monthsRemaining === 0 && remainingDaysInMonth === 0 && 'Hết hạn hôm nay'}
+                                    </p>
                                 </div>
                                 <h2 className='text-xl font-bold text-primary'>Bạn đã hủy thuê nhà!</h2>
                                 <button onClick={(ev) => undoNotRentRequest(ev, bookingDetail.id)} className="primary">Hoàn tác hủy thuê nhà</button>

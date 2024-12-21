@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { format, differenceInCalendarMonths, differenceInDays } from 'date-fns';
+import { format, differenceInCalendarMonths, differenceInDays, addMonths } from 'date-fns';
 import InvoiceForm from '../components/InvoiceForm';
 import PlaceGallery from '../components/PlaceGallery';
 import MapComponent from '../components/MapComponent';
@@ -112,9 +112,17 @@ function PlaceDetail() {
     if (bookingNow) {
         const today = new Date();
         const checkOutDate = new Date(bookingNow.checkOut);
-        const monthsRemaining = differenceInCalendarMonths(checkOutDate, today);
-        const startOfNextMonth = new Date(today.getFullYear(), today.getMonth() + monthsRemaining, 1);
-        const remainingDaysInMonth = differenceInDays(checkOutDate, startOfNextMonth);
+        let monthsRemaining = differenceInCalendarMonths(checkOutDate, today);
+        // const startOfNextMonth = new Date(today.getFullYear(), today.getMonth() + monthsRemaining, 1);
+        // const remainingDaysInMonth = differenceInDays(checkOutDate, startOfNextMonth);
+        let adjustedStartDate = addMonths(today, monthsRemaining);
+        let remainingDaysInMonth = differenceInDays(checkOutDate, adjustedStartDate) + 1;
+
+        if (remainingDaysInMonth < 0) {
+            monthsRemaining -= 1;
+            adjustedStartDate = addMonths(today, monthsRemaining);
+            remainingDaysInMonth = differenceInDays(checkOutDate, adjustedStartDate) + 1;
+        }
 
         let confirmNotBooking = null
         if(bookingNow.status === 'APPROVED') {
@@ -187,7 +195,11 @@ function PlaceDetail() {
                         </div>
                         <div className="p-4 bg-white border border-gray-300 rounded-lg shadow-md">
                             <p className="text-lg font-semibold text-gray-800">Thời gian còn lại:</p>
-                            <p className="text-gray-600">{monthsRemaining} tháng và {remainingDaysInMonth} ngày</p>
+                            <p className="text-gray-600">
+                                {monthsRemaining > 0 && `${monthsRemaining} tháng `}
+                                {remainingDaysInMonth > 0 && `${remainingDaysInMonth} ngày`}
+                                {monthsRemaining === 0 && remainingDaysInMonth === 0 && 'Hết hạn hôm nay'}
+                            </p>
                         </div>
                     </div>
 
@@ -219,7 +231,11 @@ function PlaceDetail() {
                         </div>
                         <div className="p-4 bg-white border border-gray-300 rounded-lg shadow-md">
                             <p className="text-lg font-semibold text-gray-800">Thời gian còn lại:</p>
-                            <p className="text-gray-600">{monthsRemaining} tháng và {remainingDaysInMonth} ngày</p>
+                            <p className="text-gray-600">
+                                {monthsRemaining > 0 && `${monthsRemaining} tháng `}
+                                {remainingDaysInMonth > 0 && `${remainingDaysInMonth} ngày`}
+                                {monthsRemaining === 0 && remainingDaysInMonth === 0 && 'Hết hạn hôm nay'}
+                            </p>
                         </div>
                     </div>
 

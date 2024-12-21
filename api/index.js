@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express()
 const path = require('path');
+const cron = require('node-cron');
+const updateExpiredBookings = require('./routes/updateExpiredBookings');
 
 const cors = require('cors')
 app.use(cors({
@@ -21,6 +23,17 @@ app.use("/booking", bookingsRouter);
 const adminRouter = require("./routes/Admin");
 app.use("/admin-api", adminRouter);
 
+// cron.schedule('0 0 * * *', async () => {
+//     console.log('Chạy cron job lúc 00:00 mỗi ngày.');
+//     await updateExpiredBookings();
+// });
+
+cron.schedule('*/1 * * * *', async () => {
+    console.log('cron job:');
+    await updateExpiredBookings();
+});
+
+// dist
 app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('*', (req, res) => {
